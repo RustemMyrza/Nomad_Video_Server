@@ -1,11 +1,14 @@
+import TicketsBlock from "./Tickets/TicketsBlock";
+import RightSideContent from "./RightSideContent/RightSideContent";
+
 function Content () {
     return (
-        <div className="flex">
-            <div className="w-1/2 p-4 bg-blue-500 text-white">
-                <h1>Left side</h1>
+        <div className="flex w-screen">
+            <div className="w-1/2 p-2 text-white">
+                <TicketsBlock/>
             </div>
-            <div className="w-1/2 p-4 bg-green-500 text-white">
-                <h1>Right side</h1>
+            <div className="w-1/2 p-2 text-white">
+                <RightSideContent/>
             </div>
         </div>
     )

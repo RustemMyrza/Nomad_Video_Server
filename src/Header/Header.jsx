@@ -2,7 +2,7 @@ import Logo from './Logo'
 
 function Header() {
     return(
-        <div className="header">
+        <div className="header flex justify-center">
             <div className="logo">
                 <Logo/>
             </div>

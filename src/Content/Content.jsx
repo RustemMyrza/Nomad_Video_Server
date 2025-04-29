@@ -4,10 +4,10 @@ import RightSideContent from "./RightSideContent/RightSideContent";
 function Content () {
     return (
         <div className="flex w-screen">
-            <div className="w-1/2 p-2 text-white">
+            <div className="w-1/2 text-white">
                 <TicketsBlock/>
             </div>
-            <div className="w-1/2 p-2 text-white">
+            <div className="w-[48%] pl-2 text-white">
                 <RightSideContent/>
             </div>
         </div>

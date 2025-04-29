@@ -5,7 +5,7 @@ function Ticket ({ clientNumber = "100", windowNumber = "5" }) {
       
             {/* Левая часть: Клиент */}
             <div className="text-center">
-                <div className="text-5xl font-extrabold leading-tight">{clientNumber}</div>
+                <div className="text-3xl font-extrabold leading-tight">{clientNumber}</div>
                 <div className="text-sm tracking-wide uppercase">Клиент</div>
             </div>
 
@@ -14,7 +14,7 @@ function Ticket ({ clientNumber = "100", windowNumber = "5" }) {
 
             {/* Правая часть: Окно */}
             <div className="text-center">
-                <div className="text-5xl font-extrabold leading-tight">{windowNumber}</div>
+                <div className="text-3xl font-extrabold leading-tight">{windowNumber}</div>
                 <div className="text-sm tracking-wide uppercase">Окно</div>
             </div>
             

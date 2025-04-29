@@ -6,7 +6,7 @@ function VideoPlaylist () {
         loop
         muted
         playsInline
-        className="w-[90%] h-[300px] rounded-xl object-cover"
+        className="w-[90%] rounded-xl object-cover"
         />
     )
 }

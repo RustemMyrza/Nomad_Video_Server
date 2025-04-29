@@ -11,8 +11,12 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.4",
+    "play-sound": "^1.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.5.3",
+    "readline-sync": "^1.4.10",
+    "say": "^0.16.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

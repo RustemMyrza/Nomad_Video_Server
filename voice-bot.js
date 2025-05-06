@@ -52,7 +52,7 @@ function decomposeNumber(number) {
 }
 
 
-function buildVoicePlayList({ usingVoice, Numb, Win, Localization, Kassa }) {
+export function buildVoicePlayList({ usingVoice, Numb, Win, Localization, Kassa }) {
   const VoicePlayList = [];
   let number;
 

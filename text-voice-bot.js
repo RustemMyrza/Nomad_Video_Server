@@ -1,11 +1,9 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import player from 'play-sound';
+import { spawn } from 'child_process';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const play = player();
 
 const voiceDir = path.join(__dirname, 'public', 'Voice');
 
@@ -14,7 +12,17 @@ function getFile(filename) {
 }
 
 function Say(number, loc, list) {
-  list.push(getFile(`${number}_${loc}.wav`));
+  const { hundreds, tens, units, lastTwo } = decomposeNumber(number);
+
+  if (hundreds !== 0)
+    list.push(getFile(`${hundreds}00_${loc}.wav`));
+  if (lastTwo > 9 && lastTwo < 20) {
+    list.push(getFile(`${lastTwo}_${loc}.wav`));
+  } else {
+    list.push(getFile(`${tens}0_${loc}.wav`));
+    if (units !== 0)
+      list.push(getFile(`${units}_${loc}.wav`));
+  }
 }
 
 function SayPharsy(number, loc, list) {
@@ -26,24 +34,23 @@ function SayTurkic(number, loc, list) {
 }
 
 function containsLatinLetters(str) {
-    return /[a-zA-Z]/.test(str);
+  return /[a-zA-Z]/.test(str);
 }
 
 function decomposeNumber(number) {
-    if (number < 0 || number > 999) {
-      throw new Error("Number must be between 0 and 999");
-    }
-  
-    const s = number.toString().padStart(3, '0');
-    const hundreds = parseInt(s[0], 10);
-    const tens = parseInt(s[1], 10);
-    const units = parseInt(s[2], 10);
-    const lastTwo = parseInt(s.slice(1), 10);
-  
-    return { hundreds, tens, units, lastTwo };
+  if (number < 0 || number > 999) {
+    throw new Error("Number must be between 0 and 999");
   }
-  
-  
+
+  const s = number.toString().padStart(3, '0');
+  const hundreds = parseInt(s[0], 10);
+  const tens = parseInt(s[1], 10);
+  const units = parseInt(s[2], 10);
+  const lastTwo = parseInt(s.slice(1), 10);
+
+  return { hundreds, tens, units, lastTwo };
+}
+
 
 function buildVoicePlayList({ usingVoice, Numb, Win, Localization, Kassa }) {
   const VoicePlayList = [];
@@ -52,34 +59,18 @@ function buildVoicePlayList({ usingVoice, Numb, Win, Localization, Kassa }) {
   if (usingVoice) {
     let NumbSay = Numb;
     VoicePlayList.push(getFile(`01_NUM_${Localization}.wav`));
-
-    if (!containsLatinLetters(NumbSay)) {
-        number = parseInt(NumbSay);
-        const { hundreds, tens, units, lastTwo } = decomposeNumber(number)
-        
-        console.log(`Hundreds: ${hundreds}, typeof ${typeof hundreds}`);
-        console.log(`Tens: ${tens}, typeof ${typeof tens}`);
-        console.log(`Units: ${units}, typeof ${typeof units}`);
-        console.log(`Last two digits: ${lastTwo}, typeof ${typeof lastTwo}`);
-
-        if (hundreds !== 0)
-            VoicePlayList.push(getFile(`${hundreds}00_${Localization}.wav`))
-        if (lastTwo > 9 && lastTwo < 20){
-            VoicePlayList.push(getFile(`${lastTwo}_${Localization}.wav`))
-        } else {
-            VoicePlayList.push(getFile(`${tens}0_${Localization}.wav`))
-            if (units !== 0)
-                VoicePlayList.push(getFile(`${units}_${Localization}.wav`))
-        }
-    }
+    
     const winNum = parseInt(Win);
 
-    
+    console.log('Номер окна:', winNum);
 
     if (Localization === 'TJ') {
       SayPharsy(number, Localization, VoicePlayList);
     } else {
-      Say(number, Localization, VoicePlayList);
+      if (!containsLatinLetters(NumbSay)) {
+        number = parseInt(NumbSay);
+        Say(number, Localization, VoicePlayList)
+      }
     }
 
     if (Kassa && Localization === 'RU') {
@@ -107,7 +98,7 @@ function buildVoicePlayList({ usingVoice, Numb, Win, Localization, Kassa }) {
   return VoicePlayList;
 }
 
-// Пример воспроизведения
+// Воспроизведение через spawn
 function playPlaylist(list) {
   function next(index) {
     if (index >= list.length) return;
@@ -117,21 +108,32 @@ function playPlaylist(list) {
       return;
     }
     console.log('🔊 Воспроизведение:', item);
-    play.play(item, function (err) {
-      if (err) console.error('Ошибка при воспроизведении:', err);
+
+    const ffplayProcess = spawn('ffplay', ['-nodisp', '-autoexit', item]);
+
+    ffplayProcess.on('close', (code) => {
+      if (code !== 0) {
+        console.error('Ошибка при воспроизведении:', code);
+      }
+      next(index + 1);
+    });
+
+    ffplayProcess.on('error', (err) => {
+      console.error('Ошибка при воспроизведении:', err);
       next(index + 1);
     });
   }
+
   next(0);
 }
 
-// 🧪 Пример использования:
+// 🧪 Пример использования
 const playlist = buildVoicePlayList({
   usingVoice: true,
   Numb: '123',
   Win: '45',
-  Localization: 'RU', // Попробуй 'TJ', 'KZ', 'KG'
-  Kassa: true
+  Localization: 'RU',
+  Kassa: false
 });
 
 playPlaylist(playlist);

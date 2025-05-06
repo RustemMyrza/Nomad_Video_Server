@@ -25,14 +25,14 @@ export default function Marquee({ text, speed = 50 }) {
   }, []);
 
   return (
-    <div className="w-full h-full overflow-hidden flex items-center justify-center">
+    <div className="w-full h-full overflow-hidden flex shadow-lg items-center justify-center">
       <div className="overflow-hidden whitespace-nowrap w-full py-2">
         <div
           ref={textRef}
           className="inline-block whitespace-nowrap will-change-transform"
           style={{ minWidth: "200%" }}
         >
-          <span className="mx-4 text-white text-4xl">{text}</span>
+          <span className="mx-4 text-black text-4xl">{text}</span>
         </div>
       </div>
     </div>

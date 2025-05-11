@@ -18,13 +18,13 @@ function DateTime() {
   const date = now.toLocaleDateString('ru-RU');
 
   return (
-    <div className="w-[90%] bg-white text-black rounded-xl border border-black px-4 py-2 mx-auto shadow-md object-cover">
-      <div className="text-center text-4xl font-semibold mb-2">
+    <div className="w-[100%] bg-white text-black rounded-xl border border-black px-4 py-2 mx-auto shadow-md object-cover">
+      <div className="text-center text-6xl font-semibold mb-4">
         {time}
       </div>
       <div className="flex justify-between text-sm font-medium">
-        <div className="text-4xl">{weekday.charAt(0).toUpperCase() + weekday.slice(1)}</div>
-        <div className="text-4xl">{date}</div>
+        <div className="text-6xl">{weekday.charAt(0).toUpperCase() + weekday.slice(1)}</div>
+        <div className="text-6xl">{date}</div>
       </div>
     </div>
   );
